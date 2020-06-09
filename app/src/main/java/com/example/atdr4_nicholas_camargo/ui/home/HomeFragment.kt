@@ -53,6 +53,23 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        if (ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            requestPermissions(
+                arrayOf(
+                    Manifest.permission.ACCESS_COARSE_LOCATION,
+                    Manifest.permission.ACCESS_FINE_LOCATION
+                ), 10
+            )
+        } else {
+            readMyCurrentCoordinates()
+        }
 
         imageViewListagem.setOnClickListener {
             val intent = Intent()
@@ -90,7 +107,6 @@ class HomeFragment : Fragment() {
                         Toast.LENGTH_SHORT
                     ).show()
                 } else {
-                    readMyCurrentCoordinates()
                     if (lat.isEmpty() || lon.isEmpty()) {
                         Toast.makeText(
                             context,
@@ -98,26 +114,22 @@ class HomeFragment : Fragment() {
                             Toast.LENGTH_SHORT
                         ).show()
                     } else {
-
                         val prefixFile = "${titulo.toUpperCase(Locale.ROOT)}(${data})"
-                        val criptoTexto = CriptografadorDeFiles().cipher(texto)
-                        val criptoTitulo = CriptografadorDeFiles().cipher(titulo)
-
-                        val criptoLat = CriptografadorDeFiles().cipher(lat)
-                        val criptoLon = CriptografadorDeFiles().cipher(lon)
 
                         val nomeTxt = "$prefixFile.txt"
                         val nomeImg = "$prefixFile.fig"
                         CriptografadorDeFiles().gravarFile(
                             nomeTxt,
                             requireContext(),
-                            listOf(criptoLat, criptoLon, criptoTexto, criptoTitulo)
+                            listOf(lat, lon, texto)
                         )
-                        CriptografadorDeFiles().gravarFile(
+                        CriptografadorDeFiles().gravarByteFile(
                             nomeImg,
                             requireContext(),
-                            listOf(imgBArray!!)
+                            imgBArray!!
                         )
+
+                        imgBArray
 
                         mostrarInserido(nomeTxt, nomeImg)
                     }
@@ -129,14 +141,14 @@ class HomeFragment : Fragment() {
     }
 
     private fun mostrarInserido(txt: String, img: String) {
-        val txtFile = CriptografadorDeFiles().lerString(img, requireContext())
-        val imgFile = CriptografadorDeFiles().lerByte(txt, requireContext())
+        val txtFile = CriptografadorDeFiles().lerFileTxt(txt, requireContext())
+        val imgFile = CriptografadorDeFiles().lerImg(img, requireContext())
 
         val data = txt.split("(")[1].removeSuffix(").txt")
         val texto = txtFile[2]
-        val titulo = txtFile[3]
+        val titulo = txt.split("(")[0]
 
-        val bitmap = BitmapFactory.decodeByteArray(imgFile[0], 0, imgFile[0].size)
+        val bitmap = BitmapFactory.decodeByteArray(imgFile, 0, imgFile.size)
 
         val dados = ClasseAdapter(titulo, texto, data, bitmap)
         val adapter = AdapterGenericoAnotacao(listOf(dados))
@@ -169,15 +181,15 @@ class HomeFragment : Fragment() {
             PICK_FROM_GALLERY -> {
                 //pega os dados da Uri e converte para bitmap para alterar a imagem
                 val uri: Uri? = data?.data
-                val bitmap =
+                val bitmap: Bitmap =
                     MediaStore.Images.Media.getBitmap(requireContext().contentResolver, uri)
-
                 imageViewListagem.setImageBitmap(bitmap)
 
-                //pega o bitmap e converte para byte array
                 val stream = ByteArrayOutputStream()
-                bitmap.compress(Bitmap.CompressFormat.PNG, 90, stream)
-                imgBArray = stream.toByteArray()
+
+                bitmap.compress(Bitmap.CompressFormat.PNG, 80, stream)
+                val byteArray = stream.toByteArray()
+                imgBArray = byteArray
             }
         }
     }
