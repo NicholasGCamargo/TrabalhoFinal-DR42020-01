@@ -53,6 +53,9 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+
+        ////////////////////////////////LE PERMISSIONS E FAZ ALGO BASEADO NISSO/////////////////
         if (ContextCompat.checkSelfPermission(
                 requireContext(),
                 Manifest.permission.ACCESS_COARSE_LOCATION
@@ -71,6 +74,8 @@ class HomeFragment : Fragment() {
             readMyCurrentCoordinates()
         }
 
+
+        ////////////////////////////SELECIONAR IMAGEM//////////////////////
         imageViewListagem.setOnClickListener {
             val intent = Intent()
             intent.type = "image/*"
@@ -80,11 +85,16 @@ class HomeFragment : Fragment() {
             }
         }
 
+
+        /////////////////////BTN INSERIR A ANOTACAO///////////////////////
+
         btnInserirAnotaçãoListagem.setOnClickListener {
             //faz a inserção seguindo todos os pedidos do AT
             val titulo = editTextTituloListagem.text.toString()
             val data = SimpleDateFormat("dd_MM_yyyy_HH_mm_ss").format(Date())
             val texto = editTextMultilineListagem.text.toString()
+
+            ///////////////CONFERE PERMISSIONS CASO ALGUM BUG/////////////////////
             if (ContextCompat.checkSelfPermission(
                     requireContext(),
                     Manifest.permission.ACCESS_COARSE_LOCATION
@@ -93,6 +103,8 @@ class HomeFragment : Fragment() {
                     Manifest.permission.ACCESS_FINE_LOCATION
                 ) != PackageManager.PERMISSION_GRANTED
             ) {
+
+                /////////////PEDE PERMISSIONS CASO ALGUM BUG///////////////////////
                 requestPermissions(
                     arrayOf(
                         Manifest.permission.ACCESS_COARSE_LOCATION,
@@ -100,6 +112,9 @@ class HomeFragment : Fragment() {
                     ), 10
                 )
             } else {
+
+                ////////////////CONFERIR SE ESTA TUDO PREENCHIDO E INSERIR OS DADOS//////////////
+
                 if (imgBArray == null || texto.isEmpty() || titulo.isEmpty()) {
                     Toast.makeText(
                         context,
@@ -107,6 +122,7 @@ class HomeFragment : Fragment() {
                         Toast.LENGTH_SHORT
                     ).show()
                 } else {
+                    /////////////////ULTIMO CHECK PARA VER SE LAT E LON FORAM ATUALIZADOS/////////////////
                     if (lat.isEmpty() || lon.isEmpty()) {
                         Toast.makeText(
                             context,
@@ -114,6 +130,8 @@ class HomeFragment : Fragment() {
                             Toast.LENGTH_SHORT
                         ).show()
                     } else {
+
+                        ////////////PREPARA TUDO PARA A INSERCAO
                         val prefixFile = "${titulo.toUpperCase(Locale.ROOT)}(${data})"
 
                         val nomeTxt = "$prefixFile.txt"
@@ -139,6 +157,10 @@ class HomeFragment : Fragment() {
 
     }
 
+
+    ////////////////////////RCY VW MOSTRAR INSERIDO///////////////////////////
+
+
     private fun mostrarInserido(txt: String, img: String) {
         val txtFile = CriptografadorDeFiles().lerFileTxt(txt, requireContext())
         val imgFile = CriptografadorDeFiles().lerImg(img, requireContext())
@@ -157,6 +179,10 @@ class HomeFragment : Fragment() {
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
     }
 
+
+    ////////////////////////////////////////////REQUEST PERMISSION////////////////////////////
+
+
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,
@@ -174,6 +200,10 @@ class HomeFragment : Fragment() {
         }
     }
 
+
+    ///////////////////////////////////////////ACTIVITY RESULT//////////////////////////////////
+
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         when (requestCode) {
@@ -184,17 +214,19 @@ class HomeFragment : Fragment() {
                     MediaStore.Images.Media.getBitmap(requireContext().contentResolver, uri)
                 imageViewListagem.setImageBitmap(bitmap)
 
+                //////////se prepara para inserir os dados da imagem////////////
+
                 val stream = ByteArrayOutputStream()
 
                 bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream)
                 val byteArray = stream.toByteArray()
                 imgBArray = byteArray
-                Log.d("Primeiro Debug IMG", imgBArray.toString())
             }
         }
     }
 
 
+    ///////////////////////////COORDEDANAS LAT LON///////////////////////
     private fun readMyCurrentCoordinates() {
         val locationManager =
             requireActivity().getSystemService(LOCATION_SERVICE) as LocationManager
@@ -229,6 +261,8 @@ class HomeFragment : Fragment() {
         }
     }
 
+
+    ////////////////////location listener/////////////////////////////
     private val locationListener: LocationListener =
         object : LocationListener {
             override fun onLocationChanged(location: Location) {

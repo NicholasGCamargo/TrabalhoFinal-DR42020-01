@@ -1,7 +1,6 @@
 package com.example.atdr4_nicholas_camargo.cripto
 
 import android.content.Context
-import android.util.Log
 import androidx.security.crypto.EncryptedFile
 import androidx.security.crypto.MasterKeys
 import java.io.*
@@ -25,9 +24,7 @@ class CriptografadorDeFiles {
     fun gravarByteFile(nome: String, context: Context, img: ByteArray) {
         val encryptedOut: FileOutputStream =
             getEncFile(nome, context).openFileOutput()
-        val pw = PrintWriter(encryptedOut)
-        pw.println(img)
-        pw.flush()
+        encryptedOut.write(img)
         encryptedOut.close()
     }
 
@@ -47,7 +44,6 @@ class CriptografadorDeFiles {
         val encryptedIn: FileInputStream =
             getEncFile(nome, context).openFileInput()
         val reader = ByteArrayInputStream(encryptedIn.readBytes())
-        Log.d("VER AQUI NICHOLAU", reader.readBytes().toString())
         return reader.readBytes()
     }
 
