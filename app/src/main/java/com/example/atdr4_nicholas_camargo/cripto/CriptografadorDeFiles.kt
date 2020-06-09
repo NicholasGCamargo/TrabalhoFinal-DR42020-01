@@ -1,7 +1,6 @@
 package com.example.atdr4_nicholas_camargo.cripto
 
 import android.content.Context
-import android.util.Base64
 import android.util.Log
 import androidx.security.crypto.EncryptedFile
 import androidx.security.crypto.MasterKeys
@@ -45,15 +44,11 @@ class CriptografadorDeFiles {
     }
 
     fun lerImg(nome: String, context: Context): ByteArray {
-        val lista: List<String> = lerFileTxt(nome, context)
-
-        var bigString = ""
-        lista.forEach {
-            Log.d("Check", it)
-            bigString += it
-        }
-
-        return Base64.decode(bigString, Base64.DEFAULT)
+        val encryptedIn: FileInputStream =
+            getEncFile(nome, context).openFileInput()
+        val reader = ByteArrayInputStream(encryptedIn.readBytes())
+        Log.d("VER AQUI NICHOLAU", reader.readBytes().toString())
+        return reader.readBytes()
     }
 
     fun lerFileTxt(nome: String, context: Context): List<String> {

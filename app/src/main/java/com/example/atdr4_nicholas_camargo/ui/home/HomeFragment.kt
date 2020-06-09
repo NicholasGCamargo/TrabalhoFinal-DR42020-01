@@ -123,13 +123,12 @@ class HomeFragment : Fragment() {
                             requireContext(),
                             listOf(lat, lon, texto)
                         )
+                        Log.d("DEBUG DE IMG", imgBArray.toString())
                         CriptografadorDeFiles().gravarByteFile(
                             nomeImg,
                             requireContext(),
                             imgBArray!!
                         )
-
-                        imgBArray
 
                         mostrarInserido(nomeTxt, nomeImg)
                     }
@@ -187,9 +186,10 @@ class HomeFragment : Fragment() {
 
                 val stream = ByteArrayOutputStream()
 
-                bitmap.compress(Bitmap.CompressFormat.PNG, 80, stream)
+                bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream)
                 val byteArray = stream.toByteArray()
                 imgBArray = byteArray
+                Log.d("Primeiro Debug IMG", imgBArray.toString())
             }
         }
     }
