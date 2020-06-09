@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">ATDR4_Nicholas_Camargo</string>
+
+    <!--    activity_main strings-->
+    <string name="email_main">Email…</string>
+    <string name="senha_main">Senha…</string>
+    <string name="btn_criar">Criar conta</string>
+    <string name="btn_login">Conectar-se</string>
 </resources>
