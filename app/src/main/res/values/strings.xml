@@ -6,4 +6,8 @@
     <string name="senha_main">Senha…</string>
     <string name="btn_criar">Criar conta</string>
     <string name="btn_login">Conectar-se</string>
+    <string name="title_activity_principal">ActivityPrincipal</string>
+    <string name="title_home">Listagem</string>
+    <string name="title_dashboard">Criar Anotação</string>
+    <string name="title_notifications">Notifications</string>
 </resources>
