@@ -70,16 +70,16 @@ class HomeFragment : Fragment() {
                     Manifest.permission.ACCESS_FINE_LOCATION
                 ), 10
             )
-        } else {
+
             readMyCurrentCoordinates()
         }
+
+        readMyCurrentCoordinates()
 
 
         ////////////////////////////SELECIONAR IMAGEM//////////////////////
         imageViewListagem.setOnClickListener {
-            val intent = Intent()
-            intent.type = "image/*"
-            intent.action = Intent.ACTION_GET_CONTENT
+            val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
             if (intent.resolveActivity(requireContext().packageManager) != null) {
                 startActivityForResult(intent, PICK_FROM_GALLERY)
             }
@@ -111,10 +111,11 @@ class HomeFragment : Fragment() {
                         Manifest.permission.ACCESS_FINE_LOCATION
                     ), 10
                 )
+                readMyCurrentCoordinates()
             } else {
 
                 ////////////////CONFERIR SE ESTA TUDO PREENCHIDO E INSERIR OS DADOS//////////////
-
+                readMyCurrentCoordinates()
                 if (imgBArray == null || texto.isEmpty() || titulo.isEmpty()) {
                     Toast.makeText(
                         context,
@@ -209,16 +210,15 @@ class HomeFragment : Fragment() {
         when (requestCode) {
             PICK_FROM_GALLERY -> {
                 //pega os dados da Uri e converte para bitmap para alterar a imagem
-                val uri: Uri? = data?.data
-                val bitmap: Bitmap =
-                    MediaStore.Images.Media.getBitmap(requireContext().contentResolver, uri)
+                val bitmap: Bitmap? =
+                    data?.extras!!["data"] as Bitmap?
                 imageViewListagem.setImageBitmap(bitmap)
 
                 //////////se prepara para inserir os dados da imagem////////////
 
                 val stream = ByteArrayOutputStream()
 
-                bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream)
+                bitmap?.compress(Bitmap.CompressFormat.PNG, 100, stream)
                 val byteArray = stream.toByteArray()
                 imgBArray = byteArray
             }

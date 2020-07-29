@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "774816996381",
+    "firebase_url": "https://atdr420201.firebaseio.com",
+    "project_id": "atdr420201",
+    "storage_bucket": "atdr420201.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:774816996381:android:5831ed65a0ca1e5a943af4",
+        "android_client_info": {
+          "package_name": "com.example.atdr4_nicholas_camargo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "774816996381-jkgij9sn7hn8dmv2g6541c2gk9tim9r2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDATH8tcWhlEDXjEFOCZ_3mMCXv_4IJP_Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "774816996381-jkgij9sn7hn8dmv2g6541c2gk9tim9r2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

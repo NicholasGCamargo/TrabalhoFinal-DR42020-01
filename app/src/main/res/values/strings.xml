@@ -7,7 +7,7 @@
     <string name="btn_criar">Criar conta</string>
     <string name="btn_login">Conectar-se</string>
     <string name="title_activity_principal">ActivityPrincipal</string>
-    <string name="title_home">Listagem</string>
-    <string name="title_dashboard">Criar Anotação</string>
+    <string name="title_home">Criar Anotação</string>
+    <string name="title_dashboard">Listagem</string>
     <string name="title_notifications">Notifications</string>
 </resources>
